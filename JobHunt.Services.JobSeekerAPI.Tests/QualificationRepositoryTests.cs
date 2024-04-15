@@ -70,7 +70,7 @@ namespace JobHunt.Services.JobSeekerAPI.Tests
                 await context.SaveChangesAsync();
             }
             Guid userId = new Guid("8EDBD66B-3289-4535-90EE-77448716C03A");
-            List<Qualification> Qualifications = new List<Qualification>() { _qualification1, _qualification2 };
+            List<Qualification> qualifications = new List<Qualification>() { _qualification1, _qualification2 };
 
             // Act 
             List<Qualification> qualificationFromDb;
@@ -81,7 +81,7 @@ namespace JobHunt.Services.JobSeekerAPI.Tests
             }
 
             // Assert
-            CollectionAssert.AreEqual(Qualifications, qualificationFromDb, new QualificationCompare());
+            CollectionAssert.AreEqual(qualifications, qualificationFromDb, new QualificationCompare());
         }
 
         [Test]

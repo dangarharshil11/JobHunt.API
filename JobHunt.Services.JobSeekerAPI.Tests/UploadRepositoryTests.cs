@@ -18,7 +18,7 @@ namespace JobHunt.Services.JobSeekerAPI.Tests
         public void Setup()
         {
             _webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            _webHostEnvironmentMock.Setup(m => m.ContentRootPath).Returns("D:\\JobHunt\\API2\\JobHunt\\JobHunt.Services.JobSeekerAPI.Tests\\StaticFiles\\");
+            _webHostEnvironmentMock.Setup(m => m.ContentRootPath).Returns("D:\\JobHunt\\API\\JobHunt\\JobHunt.Services.JobSeekerAPI.Tests\\StaticFiles\\");
             _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
 
             _uploadRepository = new UploadRepository(_webHostEnvironmentMock.Object, _httpContextAccessorMock.Object);

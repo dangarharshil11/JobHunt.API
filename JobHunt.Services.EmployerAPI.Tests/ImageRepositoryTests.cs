@@ -18,7 +18,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
         public void Setup()
         {
             _webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            _webHostEnvironmentMock.Setup(m => m.ContentRootPath).Returns("D:\\JobHunt\\API2\\JobHunt\\JobHunt.Services.EmployerAPI.Tests");
+            _webHostEnvironmentMock.Setup(m => m.ContentRootPath).Returns("D:\\JobHunt\\API\\JobHunt\\JobHunt.Services.EmployerAPI.Tests");
             _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
 
             _imageRepository = new ImageRepository(_webHostEnvironmentMock.Object, _httpContextAccessorMock.Object);

@@ -13,6 +13,6 @@
         public DateTime LastDate { get; set; }
         public double MinimumSalary { get; set; }
         public double MaximumSalary { get; set; }
-        public bool? Applied { get; set; }
+        public bool Applied { get; set; } = false;
     }
 }
