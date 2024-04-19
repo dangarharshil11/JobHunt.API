@@ -121,8 +121,11 @@ namespace JobHunt.Services.AuthAPI.Controllers
                 }
             }
             // If User Does not Exists by that email
-            _response.IsSuccess = false;
-            _response.Message = "User Does Not Exists. Please Register";
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "User Does Not Exists. Please Register";
+            }
 
             return Ok(_response);
         }
