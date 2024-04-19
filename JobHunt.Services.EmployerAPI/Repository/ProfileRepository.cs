@@ -14,6 +14,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
             _httpClientFactory = httpClientFactory;
         }
 
+        // Method for getting Users form JobSekeer Database By Calling JobSeeker Micorservice
         public async Task<List<UserDto>> GetUsers(List<Guid> users)
         {
             var client = _httpClientFactory.CreateClient("Profile");

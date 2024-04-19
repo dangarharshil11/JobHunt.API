@@ -4,6 +4,7 @@ using JobHunt.Services.EmployerAPI.Models.Dto;
 
 namespace JobHunt.Services.EmployerAPI
 {
+    // Mapping Configuration of Models to its Respective Dtos and Vice-Versa
     public class MappingConfig
     {
         public static MapperConfiguration RegisterMaps()

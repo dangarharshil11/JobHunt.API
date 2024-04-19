@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,7 +43,7 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 
-// configuring MicroServices 
+// Configuring MicroServices 
 builder.Services.AddHttpClient("Profile", u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:jobSeekerAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>(); ;
 
 // Authorization for API
@@ -100,6 +101,7 @@ app.UseCors(options =>
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Serving Images Folder to public which contains Organization logos
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
@@ -110,6 +112,7 @@ app.MapControllers();
 ApplyMigration();
 app.Run();
 
+// Applying pending Migrations to database if any
 void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())

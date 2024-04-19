@@ -25,6 +25,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             _response = new();
         }
 
+        // Get Endpoint for Retrieving all Job-Applications from the Database of a particular user
         [HttpGet]
         [Route("getAllByUser/{id}")]
         [Authorize]
@@ -50,6 +51,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Get Endpoint for Retrieving all Job-Applications from the Database for a particular vacancy
         [HttpGet]
         [Route("getAllByVacancy/{id}")]
         [Authorize]
@@ -86,6 +88,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for Creating Job-Application
+        // Only Users with Jobseeker Role are allowed
         [HttpPost]
         [Route("createApplication")]
         [Authorize(Roles = SD.RoleJobSeeker)]
@@ -100,6 +104,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Checking if User has already applied for that vacancy
                 UserVacancyRequest userVacancyRequest = _mapper.Map<UserVacancyRequest>(request);
                 var existingVacancy = await _applicationRepository.GetDetailAsync(userVacancyRequest.UserId, userVacancyRequest.VacancyId);
                 if (existingVacancy != null)
@@ -107,9 +112,10 @@ namespace JobHunt.Services.EmployerAPI.Controllers
                     _response.IsSuccess = false;
                     _response.Message = "You have Already Applied";
                 }
+                // if not then create job-application with default status of "SUBMITTED"
                 else
                 {
-                    userVacancyRequest.ApplicationStatus = "SUBMITTED";
+                    userVacancyRequest.ApplicationStatus = SD.Status_Submitted;
                     var result = await _applicationRepository.CreateAsync(userVacancyRequest);
                     var response = _mapper.Map<UserVacancyResponseDto>(result);
                     _response.Result = response;
@@ -119,6 +125,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for updating status of job-application
+        // Only Users with Employer Role are allowed
         [HttpPost]
         [Route("processApplication")]
         [Authorize(Roles = SD.RoleEmployer)]
@@ -136,6 +144,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Only Accepted or Rejected status is allowed
                 if (status == null || (status.Trim().ToUpper() != SD.Status_Accepted && status.Trim().ToUpper() != SD.Status_Rejected))
                 {
                     _response.IsSuccess = false;
@@ -160,6 +169,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for Server SIde Pagination, Filtering, Sorting and Advanced Searching
         [HttpPost]
         [Route("paginationEndpoint")]
         [Authorize]
@@ -167,6 +177,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Pagination([FromBody] SP_VacancyRequestDto request)
         {
+            // Validating Request
             if (request.VacancyId == Guid.Empty || request.StartIndex < 0 || request.PageSize < 1)
             {
                 _response.IsSuccess = false;

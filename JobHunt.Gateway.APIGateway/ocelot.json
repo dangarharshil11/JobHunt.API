@@ -124,6 +124,7 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+
     // application controller
     {
       "DownstreamPathTemplate": "/api/application/getAllByUser/{id}",
@@ -340,6 +341,7 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+
     // qualification controller
     {
       "DownstreamPathTemplate": "/api/qualification/GetAllQualificationsByUserId/{id}",

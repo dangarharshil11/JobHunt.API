@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -87,13 +88,14 @@ app.UseCors(options =>
 app.UseAuthorization();
 app.UseAuthorization();
 
-// Resumes Folder
+// Resumes Folder containg all Jobseeker's Resumes
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resumes")),
     RequestPath = "/Resumes"
 });
 
+// Images Folder containg all Jobseeker's Profile Images
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
@@ -104,6 +106,7 @@ app.MapControllers();
 ApplyMigration();
 app.Run();
 
+// Applying pending Migrations to database if any
 void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())

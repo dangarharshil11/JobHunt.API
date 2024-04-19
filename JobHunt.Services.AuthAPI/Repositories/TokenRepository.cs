@@ -18,6 +18,7 @@ namespace JobHunt.Services.AuthAPI.Repositories
 
         public string CreateJwtToken(ApplicationUser user, List<string> roles)
         {
+            // Adding user email, fullname and userId into claims
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
@@ -25,6 +26,7 @@ namespace JobHunt.Services.AuthAPI.Repositories
                 new Claim("Id", user.Id)
             };
 
+            // Adding Roles to the claims
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

@@ -17,7 +17,10 @@ namespace JobHunt.Services.EmployerAPI.Repository
         public async Task<CompanyLogoDTO> Upload(IFormFile file, CompanyLogoDTO companyLogoDTO)
         {
             var localPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{companyLogoDTO.FileName}{companyLogoDTO.FileExtension}");
+            
             FileInfo oldFile = new FileInfo(localPath);
+
+            // If Old File Exists then Delete it
             if (oldFile.Exists)
             {
                 oldFile.Delete();
@@ -27,6 +30,7 @@ namespace JobHunt.Services.EmployerAPI.Repository
             await file.CopyToAsync(stream);
 
             var httpRequest = _httpContextAccessor.HttpContext.Request;
+            // Generate url which will be stored in the database
             var urlPath = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Images/{companyLogoDTO.FileName}{companyLogoDTO.FileExtension}";
 
             companyLogoDTO.Url = urlPath;

@@ -25,6 +25,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             _response = new();
         }
 
+        // Get Endpoint for retrieving all vacancies
         [HttpGet]
         [Route("getAllVacancies")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,6 +41,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Get Endpoint for retrieving vacancy by vacancyId
         [HttpGet]
         [Route("getVacancyById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -68,6 +70,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Get Endpoint for retrieving all vacancies posted by particular organization
         [HttpGet]
         [Route("getByCompany/{email}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -80,6 +83,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Checks whether organization exists or not
                 var employerDetails = await _companyRepository.GetByEmailAsync(email);
 
                 if (employerDetails == null)
@@ -104,6 +108,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for creating vacancy
+        // Only Users with Employer Role are allowed
         [HttpPost]
         [Route("addVacancy")]
         [Authorize(Roles = SD.RoleEmployer)]
@@ -118,6 +124,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Checks whether Organization Exists or not
                 string email = request.PublishedBy;
                 var employerDetails = await _companyRepository.GetByEmailAsync(email);
                 if (employerDetails == null)
@@ -140,6 +147,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Put Endpoint for updating vacancy
+        // Only Users with Employer Role are allowed
         [HttpPut]
         [Route("vacancy/{id}")]
         [Authorize(Roles = SD.RoleEmployer)]
@@ -154,6 +163,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Checks whether Organization Exists or not
                 string email = vacancyDto.PublishedBy;
                 var employerDetails = await _companyRepository.GetByEmailAsync(email);
                 vacancyDto.PublishedBy = employerDetails.Organization;
@@ -165,11 +175,13 @@ namespace JobHunt.Services.EmployerAPI.Controllers
 
                 VacancyResponseDto response = _mapper.Map<VacancyResponseDto>(result);
                 _response.Result = response;
-                _response.Message = "Vacnacy Updated Successfully";
+                _response.Message = "Vacancy Updated Successfully";
             }
             return Ok(_response);
         }
 
+        // Delete Endpoint for deleting vacancy
+        // Only Users with Employer Role are allowed
         [HttpDelete]
         [Route("vacancy/{id}")]
         [Authorize(Roles = SD.RoleEmployer)]
@@ -184,6 +196,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Checks whether vacancy exists or not
                 Vacancy vacancy = await _vacancyRepository.GetByIdAsync(id);
                 if (vacancy == null)
                 {

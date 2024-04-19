@@ -9,12 +9,11 @@ namespace JobHunt.Services.AuthAPI.Data
     public class AuthDbContext : IdentityDbContext<ApplicationUser>
     {
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
-        {
-
-        }
+        { }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        // Initalizing the Auth Database with Roles and Admin User
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

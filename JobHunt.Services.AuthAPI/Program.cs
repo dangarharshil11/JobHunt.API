@@ -87,6 +87,8 @@ app.MapControllers();
 ApplyMigration();
 app.Run();
 
+
+// Applying pending Migrations to database if any
 void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())

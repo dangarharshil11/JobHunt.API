@@ -26,6 +26,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             _imageRepository = imageRepository;
         }
 
+        // Get Endpoint for retrieving Organization Profile By email
         [HttpGet]
         [Route("{email}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -38,6 +39,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Check whether Organization has Profile or not
                 var result = await _companyRepository.GetByEmailAsync(email);
                 if (result == null)
                 {
@@ -54,6 +56,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Get Endpoint for retrieving Organization Profile By organization name
         [HttpGet]
         [Route("getProfileByName/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -66,6 +69,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Check whether Organization has Profile or not
                 var result = await _companyRepository.GetByNameAsync(name);
                 if (result == null)
                 {
@@ -81,6 +85,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for Creating Organization Profile
+        // Only Users with Employer Role are allowed
         [HttpPost]
         [Route("companyDetails")]
         [Authorize(Roles = SD.RoleEmployer)]
@@ -95,11 +101,12 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             }
             else
             {
+                // Check if Organization Profile alreday exists or not
                 var existingCompany = await _companyRepository.GetByNameAsync(request.Organization);
                 if (existingCompany != null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Organization Information Not Found";
+                    _response.Message = "Organization Information Already Exists";
                 }
                 else
                 {
@@ -113,6 +120,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Put Endpoint for Updating Organization Profile
+        // Only Users with Employer Role are allowed
         [HttpPut]
         [Route("companyDetails")]
         [Authorize(Roles = SD.RoleEmployer)]
@@ -120,6 +129,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateCompany([FromBody] EmployerDto request)
         {
+            // Checks if Organization Profile already exists or not
             var result = await _companyRepository.GetByEmailAsync(request.CreatedBy);
             if (result == null)
             {
@@ -139,6 +149,8 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for Uploding Organization Logo
+        // Only Users with Employer Role are allowed
         [HttpPost]
         [Authorize(Roles = SD.RoleEmployer)]
         [Route("uploadImage")]
@@ -169,6 +181,7 @@ namespace JobHunt.Services.EmployerAPI.Controllers
             return Ok(_response);
         }
 
+        // Validates the extension and file size
         private void ValidateFileUpload(IFormFile file)
         {
             var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };

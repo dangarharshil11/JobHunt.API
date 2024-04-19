@@ -6,6 +6,7 @@ namespace JobHunt.Services.JobSeekerAPI
 {
     public class MappingConfig
     {
+        // Mapping Configuration of Models to its Respective Dtos and Vice-Versa
         public static MapperConfiguration RegisterMaps()
         {
             var mappingConfig = new MapperConfiguration(config =>

@@ -5,6 +5,7 @@ using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
 using JobHunt.Services.JobSeekerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
 {
@@ -25,6 +26,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             _response = new();
         }
 
+        // Post Endpoint for retrieving users based on list of userId
         [HttpPost]
         [Route("getUsers")]
         [Authorize]
@@ -41,6 +43,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(response);
         }
 
+        // Get Endpoint for retrieving particular user profile based on email
         [HttpGet]
         [Route("getByEmail/{email}")]
         [Authorize]
@@ -55,6 +58,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             }
             else
             {
+                // Checks whether user profile exists or not
                 User result = await _profileRepository.GetByEmailAsync(email);
 
                 if (result == null)
@@ -71,6 +75,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        // Get Endpoint for retrieving particular user profile based on userId
         [HttpGet]
         [Route("getByUserId/{userId}")]
         [Authorize]
@@ -85,6 +90,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             }
             else
             {
+                // Checks whether user profile exists or not
                 User result = await _profileRepository.GetByUserIdAsync(userId);
 
                 if (result == null)
@@ -101,6 +107,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for Creating User profile
+        // Only Users with Jobseeker Role are allowed
         [HttpPost]
         [Route("profile")]
         [Authorize(Roles = SD.RoleJobSeeker)]
@@ -123,34 +131,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
-        [HttpPost]
-        [Route("uploadResume")]
-        [Authorize(Roles = SD.RoleJobSeeker)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> UploadResume([FromForm] IFormFile file, [FromForm] string fileName)
-        {
-            ValidateFileUpload(file);
-
-            if (ModelState.IsValid)
-            {
-                var resume = new UploadDto
-                {
-                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
-                    FileName = fileName
-                };
-
-                resume = await _uploadRepository.UploadResume(file, resume);
-                _response.Result = resume.Url;
-            }
-            else
-            {
-                _response.IsSuccess = false;
-                _response.Message = "Resume Upload Model is not Valid";
-            }
-            return Ok(_response);
-        }
-
+        // Put Endpoint for Updating User profile
+        // Only Users with Jobseeker Role are allowed
         [HttpPut]
         [Route("profile")]
         [Authorize(Roles = SD.RoleJobSeeker)]
@@ -183,6 +165,38 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for uploading user Resume
+        // Only Users with Jobseeker Role are allowed
+        [HttpPost]
+        [Route("uploadResume")]
+        [Authorize(Roles = SD.RoleJobSeeker)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> UploadResume([FromForm] IFormFile file, [FromForm] string fileName)
+        {
+            ValidateFileUpload(file);
+
+            if (ModelState.IsValid)
+            {
+                var resume = new UploadDto
+                {
+                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
+                    FileName = fileName
+                };
+
+                resume = await _uploadRepository.UploadResume(file, resume);
+                _response.Result = resume.Url;
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Resume Upload Model is not Valid";
+            }
+            return Ok(_response);
+        }
+
+        // Post Endpoint for uploading user profile Image
+        // Only Users with Jobseeker Role are allowed
         [HttpPost]
         [Authorize(Roles = SD.RoleJobSeeker)]
         [Route("uploadImage")]
@@ -209,6 +223,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        // Validate the Image Extension and file size
         private void ValidateImageUpload(IFormFile file)
         {
             var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
@@ -224,6 +239,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             }
         }
 
+        // Validate the Resume Extension and file size
         private void ValidateFileUpload(IFormFile file)
         {
             var allowedExtensions = new string[] { ".pdf", ".doc" };

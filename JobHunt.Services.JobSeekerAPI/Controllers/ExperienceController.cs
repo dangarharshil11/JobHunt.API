@@ -5,6 +5,7 @@ using JobHunt.Services.JobSeekerAPI.Repository.IRepository;
 using JobHunt.Services.JobSeekerAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace JobHunt.Services.JobSeekerAPI.Controllers
 {
@@ -23,6 +24,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             _response = new();
         }
 
+        // Get Endpoint for retrieving all Experiences of a user
         [HttpGet]
         [Route("getAllExperiencesByUserId/{userId}")]
         [Authorize]
@@ -49,6 +51,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        // Get Endpoint for retrieving particular Experience of a user
         [HttpGet]
         [Route("getExperienceById/{id}")]
         [Authorize]
@@ -79,6 +82,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        // Post Endpoint for creating user Experience
+        // Only Users with Jobseeker Role are allowed
         [HttpPost]
         [Route("addExperience")]
         [Authorize(Roles = SD.RoleJobSeeker)]
@@ -103,6 +108,8 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+        // Put Endpoint for updating user Experience
+        // Only Users with Jobseeker Role are allowed
         [HttpPut]
         [Route("experience/{id}")]
         [Authorize(Roles = SD.RoleJobSeeker)]
@@ -120,6 +127,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
                 UserExperience experience = _mapper.Map<UserExperience>(request);
                 experience.Id = id;
 
+                // Checks whether user experience exists or not
                 var result = await _experienceRepository.UpdateAsync(experience);
                 if (result != null)
                 {
@@ -136,6 +144,9 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             return Ok(_response);
         }
 
+
+        // Delete Endpoint for deleting user Experience
+        // Only Users with Jobseeker Role are allowed
         [HttpDelete]
         [Route("experience/{id}")]
         [Authorize(Roles = SD.RoleJobSeeker)]
@@ -150,6 +161,7 @@ namespace JobHunt.Services.JobSeekerAPI.Controllers
             }
             else
             {
+                // Checks whether user experience exists or not
                 UserExperience experience = await _experienceRepository.GetByIdAsync(id);
                 if (experience == null)
                 {

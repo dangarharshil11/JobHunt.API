@@ -22,6 +22,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
             _response = new ResponseDto();
         }
 
+        // Register Endpoint for registering new users
         [HttpPost]
         [Route("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -80,19 +81,24 @@ namespace JobHunt.Services.AuthAPI.Controllers
             return Ok(_response);
         }
 
+        // Login Endpoint
         [HttpPost]
         [Route("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Login([FromBody] LoginRequstDto request)
         {
+            // Getting User based on email from Database
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user != null)
             {
+                // verifying entered password with actual password
                 var checkPassword = await _userManager.CheckPasswordAsync(user, request.Password);
                 if (checkPassword)
                 {
                     var roles = await _userManager.GetRolesAsync(user);
+
+                    // Jwt Token Generation
                     var token = _tokenRepository.CreateJwtToken(user, roles.ToList());
                     var response = new LoginResponseDto()
                     {
@@ -107,24 +113,27 @@ namespace JobHunt.Services.AuthAPI.Controllers
                     _response.Message = "Login Successful";
 
                 }
+                // If Password Does not Match
                 else
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Invalid Login Credentials";
                 }
-                return Ok(_response);
             }
+            // If User Does not Exists by that email
             _response.IsSuccess = false;
             _response.Message = "User Does Not Exists. Please Register";
 
             return Ok(_response);
         }
 
+        // Endpoint for reseting the password
         [HttpPost]
         [Route("forgotpassword")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ForgotPassword([FromBody] LoginRequstDto request)
         {
+            // Checks whether email or passwords are empty or not
             if (request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
             {
                 _response.IsSuccess = false;
@@ -132,6 +141,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
             }
             else
             {
+                // Retrieving User form DB by email
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
                 {
@@ -140,6 +150,7 @@ namespace JobHunt.Services.AuthAPI.Controllers
                 }
                 else
                 {
+                    // Changing Password to newly entered password
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var identityResult = await _userManager.ResetPasswordAsync(user, token, request.Password);
                     if (identityResult.Succeeded)
