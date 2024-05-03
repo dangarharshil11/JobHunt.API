@@ -32,6 +32,7 @@ namespace JobHunt.Services.EmployerAPI.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidIssuer = issuer,
                     ValidAudience = audience,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
             return builder;
