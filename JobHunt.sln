@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.AuthAPI.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.EmployerAPI.Tests", "JobHunt.Services.EmployerAPI.Tests\JobHunt.Services.EmployerAPI.Tests.csproj", "{E13E7300-5897-4EE9-860F-46425650EE1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt.Services.JobSeekerAPI.Tests", "JobHunt.Services.JobSeekerAPI.Tests\JobHunt.Services.JobSeekerAPI.Tests.csproj", "{B691964B-16C3-45DF-8200-7E2DAD2192F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunt.Services.JobSeekerAPI.Tests", "JobHunt.Services.JobSeekerAPI.Tests\JobHunt.Services.JobSeekerAPI.Tests.csproj", "{B691964B-16C3-45DF-8200-7E2DAD2192F9}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{62D7FE48-C212-4637-AE1E-C06AB32E3B29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{B691964B-16C3-45DF-8200-7E2DAD2192F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B691964B-16C3-45DF-8200-7E2DAD2192F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B691964B-16C3-45DF-8200-7E2DAD2192F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62D7FE48-C212-4637-AE1E-C06AB32E3B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62D7FE48-C212-4637-AE1E-C06AB32E3B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62D7FE48-C212-4637-AE1E-C06AB32E3B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62D7FE48-C212-4637-AE1E-C06AB32E3B29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

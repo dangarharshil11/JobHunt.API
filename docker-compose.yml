@@ -1,0 +1,78 @@
+version: '3.4'
+
+services:
+  authdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+       - SA_PASSWORD=Synoptek@321
+       - ACCEPT_EULA=Y
+    ports:
+       - "5533:1433"
+    volumes:
+       - authdbvol:/var/opt/mssql
+    networks:
+       - jobhunt_network
+  jobhunt.services.authapi:
+    image: ${DOCKER_REGISTRY-}jobhuntservicesauthapi
+    build:
+      context: .
+      dockerfile: JobHunt.Services.AuthAPI\Dockerfile
+    ports:
+       - 7001:8081
+       - 7011:8080
+    networks:
+       - jobhunt_network
+ 
+ 
+  employerdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+       - SA_PASSWORD=Synoptek@321
+       - ACCEPT_EULA=Y
+    ports:
+       - "5534:1433"
+    volumes:
+       - employerdbvol:/var/opt/mssql
+    networks:
+       - jobhunt_network
+  jobhunt.services.employerapi:
+    image: ${DOCKER_REGISTRY-}jobhuntservicesemployerapi
+    build:
+      context: .
+      dockerfile: JobHunt.Services.EmployerAPI/Dockerfile
+    ports:
+       - 7002:8081
+       - 7012:8080
+    networks:
+       - jobhunt_network
+
+
+  jobseekerdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+       - SA_PASSWORD=Synoptek@321
+       - ACCEPT_EULA=Y
+    ports:
+       - "5535:1433"
+    volumes:
+       - jobseekerdbvol:/var/opt/mssql
+    networks:
+       - jobhunt_network
+  jobhunt.services.jobseekerapi:
+    image: ${DOCKER_REGISTRY-}jobhuntservicesjobseekerapi
+    build:
+      context: .
+      dockerfile: JobHunt.Services.JobSeekerAPI/Dockerfile
+    ports:
+       - 7003:8081
+       - 7013:8080
+    networks:
+       - jobhunt_network
+
+volumes:
+  authdbvol :
+  employerdbvol :
+  jobseekerdbvol:
+
+networks:
+    jobhunt_network:

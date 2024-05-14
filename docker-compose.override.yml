@@ -1,0 +1,81 @@
+version: '3.4'
+
+services:
+  jobhunt.services.authapi:
+    environment:
+      - 
+      
+      
+      
+      
+      =Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "7001:8081"
+      - "7011:8080"
+    networks:
+       - jobhunt_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  jobhunt.services.employerapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "7002:8081"
+      - "7012:8080"
+    networks:
+       - jobhunt_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  jobhunt.services.jobseekerapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "7003:8081"
+      - "7013:8080"
+    networks:
+       - jobhunt_network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  authdb:
+    environment:
+      - SA_PASSWORD=Synoptek@321
+      - ACCEPT_EULA=Y
+    ports:
+      - "5533:1433"
+    volumes:
+      - authdbvol:/var/opt/mssql
+    networks:
+       - jobhunt_network
+  employerdb:
+    environment:
+      - SA_PASSWORD=Synoptek@321
+      - ACCEPT_EULA=Y
+    ports:
+      - "5534:1433"
+    volumes:
+      - employerdbvol:/var/opt/mssql
+    networks:
+       - jobhunt_network
+  jobseekerdb:
+    environment:
+      - SA_PASSWORD=Synoptek@321
+      - ACCEPT_EULA=Y
+    ports:
+      - "5535:1433"
+    volumes:
+      - jobseekerdbvol:/var/opt/mssql
+    networks:
+       - jobhunt_network
+
+networks:
+    jobhunt_network:

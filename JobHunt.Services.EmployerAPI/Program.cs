@@ -44,7 +44,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 
 // Configuring MicroServices 
-builder.Services.AddHttpClient("Profile", u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:jobSeekerAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>(); ;
+builder.Services.AddHttpClient("Profile", u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:jobSeekerAPI"]))
+    .AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>()
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+     { 
+        ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } 
+     });
 
 // Authorization for API
 builder.Services.AddSwaggerGen(option =>

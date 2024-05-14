@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "jobhunt.services.authapi": "StartDebugging",
+        "jobhunt.services.employerapi": "StartDebugging",
+        "jobhunt.services.jobseekerapi": "StartDebugging"
+      }
+    }
+  }
+}

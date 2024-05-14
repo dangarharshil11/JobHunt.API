@@ -15,7 +15,8 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5175",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        " ": "
+        Development"
       }
     },
     "https": {
